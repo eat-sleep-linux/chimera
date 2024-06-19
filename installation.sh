@@ -1,21 +1,21 @@
 #!/bin/sh
 
-wipefs -a /dev/nvme0n1
-sfdisk /dev/nvme0n1 <<EOF
+doas wipefs -a /dev/nvme0n1
+doas sfdisk /dev/nvme0n1 <<EOF
 label: gpt
 name=esp, size=120M, type="EFI System"
 name=root
 EOF
-mkfs.vfat /dev/nvme0n1p1
-mkfs.xfs /dev/nvme0n1p2
-mkfs.xfs /dev/nvme0n1p3
-mkdir /media/root
-mkdir /media/home
-mount /dev/nvme0n1p2 /media/root
-mount /dev/nvme0n1p3 /media/home
-mkdir -p /media/root/boot/efi
-mount /dev/nvme0n1p1 /media/root/boot/efi
-chmod 755 /media/root
+doas mkfs.vfat /dev/nvme0n1p1
+doas mkfs.xfs /dev/nvme0n1p2
+doas mkfs.xfs /dev/nvme0n1p3
+doas mkdir /media/root
+doas mkdir /media/home
+doas mount /dev/nvme0n1p2 /media/root
+doas mount /dev/nvme0n1p3 /media/home
+doas mkdir -p /media/root/boot/efi
+doas mount /dev/nvme0n1p1 /media/root/boot/efi
+doas chmod 755 /media/root
 chimera-bootstrap -l /media/root
 chimera-chroot /media/root
 apk update
