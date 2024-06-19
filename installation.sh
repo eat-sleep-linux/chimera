@@ -5,6 +5,7 @@ doas sfdisk /dev/nvme0n1 <<EOF
 label: gpt
 name=esp, size=120M, type="EFI System"
 name=root
+name=root
 EOF
 doas mkfs.vfat /dev/nvme0n1p1
 doas mkfs.xfs /dev/nvme0n1p2
