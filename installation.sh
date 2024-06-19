@@ -5,15 +5,11 @@ doas sfdisk /dev/nvme0n1 <<EOF
 label: gpt
 name=esp, size=120M, type="EFI System"
 name=root
-name=home
 EOF
 doas mkfs.vfat /dev/nvme0n1p1
 doas mkfs.xfs /dev/nvme0n1p2
-doas mkfs.xfs /dev/nvme0n1p3
 doas mkdir /media/root
-doas mkdir /media/home
 doas mount /dev/nvme0n1p2 /media/root
-doas mount /dev/nvme0n1p3 /media/home
 doas mkdir -p /media/root/boot/efi
 doas mount /dev/nvme0n1p1 /media/root/boot/efi
 doas chmod 755 /media/root
