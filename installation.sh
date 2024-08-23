@@ -3,22 +3,26 @@
 doas wipefs -a /dev/nvme0n1
 doas sfdisk /dev/nvme0n1 <<EOF
 label: gpt
-name=esp, size=120M, type="EFI System"
-name=root
+name=esp, size=1G, type="Linux extended boot"
+name=root, size=30G
+name=home
 EOF
 doas mkfs.vfat /dev/nvme0n1p1
 doas mkfs.xfs /dev/nvme0n1p2
+doas mkfs.xfs /dev/nvme0n1p3
 doas mkdir /media/root
 doas mount /dev/nvme0n1p2 /media/root
-doas mkdir -p /media/root/boot/efi
-doas mount /dev/nvme0n1p1 /media/root/boot/efi
+doas mkdir -p /media/root/boot
+doas mkdir -p /media/root/home
+doas mount /dev/nvme0n1p1 /media/root/boot
+doas mount /dev/nvme0n1pe /media/root/home
 doas chmod 755 /media/root
 chimera-bootstrap -l /media/root
 chimera-chroot /media/root
 apk update
 apk upgrade --available
 apk fix
-apk add linux-lts grub-x86_64-efi
+apk add linux-stable systemd-boot
 genfstab -t PARTLABEL / > /etc/fstab
 passwd root
 useradd hoxton
@@ -30,7 +34,7 @@ dinitctl -o enable gdm
 dinitctl -o enable chrony
 dinitctl -o enable networkmanager
 update-initramfs -c -k all
-grub-install --efi-directory=/boot/efi
-update-grub
+bootctl install --esp-path=/boot
+gen-systemd-boot
 exit
 reboot
