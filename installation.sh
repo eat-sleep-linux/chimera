@@ -8,8 +8,8 @@ name=root, size=30G
 name=home
 EOF
 doas mkfs.vfat /dev/nvme0n1p1
-doas mkfs.xfs /dev/nvme0n1p2
-doas mkfs.xfs /dev/nvme0n1p3
+doas mkfs.xfs -f /dev/nvme0n1p2
+doas mkfs.xfs -f /dev/nvme0n1p3
 doas mkdir /media/root
 doas mount /dev/nvme0n1p2 /media/root
 doas mkdir -p /media/root/boot
@@ -17,8 +17,8 @@ doas mkdir -p /media/root/home
 doas mount /dev/nvme0n1p1 /media/root/boot
 doas mount /dev/nvme0n1p3 /media/root/home
 doas chmod 755 /media/root
-chimera-bootstrap -l /media/root
-chimera-chroot /media/root
+doas chimera-bootstrap -l /media/root
+doas chimera-chroot /media/root
 apk update
 apk upgrade --available
 apk fix
