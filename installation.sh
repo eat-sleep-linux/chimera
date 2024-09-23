@@ -3,7 +3,7 @@
 doas wipefs -a /dev/nvme0n1
 doas sfdisk /dev/nvme0n1 <<EOF
 label: gpt
-name=esp, size=1G, type="Linux extended boot"
+name=esp, size=1G, type="EFI System"
 name=root, size=30G
 name=home
 EOF
